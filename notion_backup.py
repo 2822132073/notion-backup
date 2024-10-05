@@ -321,7 +321,7 @@ def main():
         if len(backup_space_names) == 0:
             taskId = request_post('enqueueTask', exportSpace(spaceId)).get('taskId')
             url = exportUrl(taskId)
-            downloadAndUnzip(url, f'{spaceName}-{timestamp}.zip',false)
+            downloadAndUnzip(url, f'{spaceName}-{timestamp}.zip',False)
         elif spaceName in backup_space_names:
             # 指定了space下的block
             if 'space_blocks' in backup_space_config[spaceName] and backup_space_config[spaceName]['space_blocks']:
@@ -330,12 +330,12 @@ def main():
                     block_name = space_block['block_name']
                     taskId = request_post('enqueueTask', exportSpaceBlock(spaceId, block_id)).get('taskId')
                     url = exportUrl(taskId)
-                    downloadAndUnzip(url, f'{spaceName}-{block_name}.zip',false)
+                    downloadAndUnzip(url, f'{spaceName}-{block_name}.zip',False)
             else:
                 # 没指定space block则备份整个空间
                 taskId = request_post('enqueueTask', exportSpace(spaceId)).get('taskId')
                 url = exportUrl(taskId)
-                downloadAndUnzip(url, f'{spaceName}.zip',false)
+                downloadAndUnzip(url, f'{spaceName}.zip',False)
         else:
             print('space:{}跳过 不在备份列表'.format(spaceName))
             
