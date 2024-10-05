@@ -13,16 +13,7 @@ from datetime import datetime
 # ={'spaces':[]} 则备份所有空间 'space_blocks':[] 则备份整个空间
 # block id格式切记为-隔开!!!
 DEFAULT_BACKUP_CONFIG = {
-    'spaces': [{
-        'space_name': 'space_name',
-        'space_blocks': [{
-            'block_id': '12345678-1234-1234-1234-123456789123',
-            'block_name': 'Home1'
-        }, {
-            'block_id': '12345678-1234-1234-1234-123456789123',
-            'block_name': 'Home2'
-        }]
-    }]
+    'spaces': []
 }
 
 # 是否去除所有文件和文件夹的id
@@ -294,9 +285,6 @@ def push():
 
 
 def main():
-    # 初始化git仓库
-    initGit()
-    
     # 获取当前时间戳
     timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
     new_name = f"backup_{timestamp}"
@@ -315,9 +303,6 @@ def main():
     # 获取用户信息
     userContent = getUserContent()
     time.sleep(3)
-
-    #userId = list(userContent['notion_user'].keys())[0]
-    #print(f'User id: {userId}')
 
     spaces = [(space_id, space_details['value']['name']) for (space_id, space_details) in userContent['space'].items()]
     backup_space_names = []
@@ -361,9 +346,9 @@ def main():
         print(f"删除{new_name}失败: {e}")
 
     # git
-    print('开始提交代码')
-    pull()
-    push()
+    # print('开始提交代码')
+    # pull()
+    # push()
     # writeLog('notion备份完成')
 
 
@@ -410,16 +395,3 @@ if __name__ == '__main__':
 
     run_retry()
 
-# 定时定点执行
-# nohup python3 notion-backup.py -u 2>&1 >> /tmp/notion-backup.log
-# if __name__ == '__main__':
-#     print('开始执行')
-#     running = False
-#     while True and not running:
-#         now = datetime.datetime.now()
-#         if now.hour == 3 and now.minute == 0:
-#             running = True
-#             run_retry()
-#             running = False
-
-#         time.sleep(30)
