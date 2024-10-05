@@ -335,8 +335,6 @@ def main():
             
     # 删除重命名后的目录
     try:
-        shutil.rmtree(new_name)
-        print(f"目录 {new_name} 已删除")
         if  ONLY_SAVE_ZIP:
             shutil.rmtree(f'{SAVE_DIR}/{spaceName}-{timestamp}')
             print(f'删除目录 {SAVE_DIR}/{spaceName}-{timestamp}，该行为由 ONLY_SAVE_ZIP 控制')
