@@ -17,7 +17,7 @@ DEFAULT_BACKUP_CONFIG = {
 }
 
 # 是否去除所有文件和文件夹的id
-REMOVE_FILES_ID = False
+REMOVE_FILES_ID = True
 
 # 默认配置无需更改
 NOTION_TIMEZONE = os.getenv('NOTION_TIMEZONE', 'Asia/Shanghai')
@@ -224,6 +224,7 @@ def remove_files_id():
 
 
 def downloadAndUnzip(url, filename,uncompress):
+    print(f'文件名为：{filename}')
     os.makedirs(SAVE_DIR, exist_ok=True)
     savePath = SAVE_DIR + filename
     with requests.get(url, stream=True, headers={'cookie': f'file_token={NOTION_FILE_TOKEN}'}) as r:
