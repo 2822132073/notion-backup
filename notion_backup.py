@@ -129,24 +129,6 @@ def exportSpace(spaceId):
     }
 
 
-# {
-#     "task": {
-#         "eventName": "exportBlock",
-#         "request": {
-#             "block": {
-#                 "id": "c093243a-a553-45ae-954f-4bf80d995167",
-#                 "spaceId": "38d3bbb5-37de-4891-86cc-9dcfbafc30d0"
-#             },
-#             "recursive": true,
-#             "exportOptions": {
-#                 "exportType": "markdown",
-#                 "timeZone": "Asia/Shanghai",
-#                 "locale": "en",
-#                 "flattenExportFiletree": false
-#             }
-#         }
-#     }
-# }
 
 
 def exportSpaceBlock(spaceId, blockId):
@@ -330,7 +312,7 @@ def main():
                     block_name = space_block['block_name']
                     taskId = request_post('enqueueTask', exportSpaceBlock(spaceId, block_id)).get('taskId')
                     url = exportUrl(taskId)
-                    downloadAndUnzip(url, f'{spaceName}-{block_name}.zip',False)
+                    downloadAndUnzip(url, f'{spaceName}-{block_name}-{timestamp}.zip',True)
             else:
                 # 没指定space block则备份整个空间
                 taskId = request_post('enqueueTask', exportSpace(spaceId)).get('taskId')
