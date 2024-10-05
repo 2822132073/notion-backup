@@ -43,10 +43,10 @@ NOTION_EXPORT_TYPE = os.getenv('NOTION_EXPORT_TYPE', 'markdown')  # html pdf
 # 备份文件保存目录
 SAVE_DIR = 'backup/'
 # git相关信息
-REPOSITORY_URL = 'https://github.com/git_user_name/xxx.git'
+REPOSITORY_URL = 'https://github.com/2822132073/notion-backup.git'
 REPOSITORY_BRANCH = 'main'
-GIT_USERNAME = 'git_user_name'
-GIT_EMAIL = 'git@git.com'
+GIT_USERNAME = '2822132073'
+GIT_EMAIL = '2822132073@qq.com'
 
 
 def run_command(cmd):
