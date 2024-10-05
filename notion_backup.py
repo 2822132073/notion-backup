@@ -331,15 +331,15 @@ def main():
                 url = exportUrl(taskId)
                 downloadAndUnzip(url, f'{spaceName}-{timestamp}.zip',True)
                     # 删除重命名后的目录
-            try:
-                if  ONLY_SAVE_ZIP:
-                    shutil.rmtree(f'{SAVE_DIR}/{spaceName}-{timestamp}')
-                    print(f'删除目录 {SAVE_DIR}/{spaceName}-{timestamp}，该行为由 ONLY_SAVE_ZIP 控制')
-            except Exception as e:
-                print(f"删除{new_name}失败: {e}")
-                else:
-                    print('space:{}跳过 不在备份列表'.format(spaceName))
-            
+        try:
+            if  ONLY_SAVE_ZIP:
+                shutil.rmtree(f'{SAVE_DIR}/{spaceName}-{timestamp}')
+                print(f'删除目录 {SAVE_DIR}/{spaceName}-{timestamp}，该行为由 ONLY_SAVE_ZIP 控制')
+        except Exception as e:
+            print(f"删除{new_name}失败: {e}")
+            else:
+                print('space:{}跳过 不在备份列表'.format(spaceName))
+        
 
 
 
