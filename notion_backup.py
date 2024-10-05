@@ -214,7 +214,7 @@ def remove_files_id():
                 path = os.path.join(root, dir)
                 dir_id = re.compile(r'[a-fA-F\d]{8}-[a-fA-F\d]{4}-[a-fA-F\d]{4}-[a-fA-F\d]{4}-[a-fA-F\d]{12}').findall(dir)
                 if dir_id:
-                    new_dirname = dir.replace('-' + dir_id[0], '')
+                    new_dirname = dir.replace(dir_id[0], '')
                     new_path = os.path.join(root, new_dirname)
                     os.rename(path, new_path)
                     rename_dir_flag = True
