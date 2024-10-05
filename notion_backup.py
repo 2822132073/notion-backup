@@ -19,6 +19,8 @@ DEFAULT_BACKUP_CONFIG = {
 # 是否去除所有文件和文件夹的id
 REMOVE_FILES_ID = True
 
+# 是否只保留zip文件
+ONLY_SAVE_ZIP = True
 # 默认配置无需更改
 NOTION_TIMEZONE = os.getenv('NOTION_TIMEZONE', 'Asia/Shanghai')
 NOTION_LOCALE = os.getenv('NOTION_TIMEZONE', 'en')
@@ -333,6 +335,9 @@ def main():
     try:
         shutil.rmtree(new_name)
         print(f"目录 {new_name} 已删除")
+        if  ONLY_SAVE_ZIP:
+            shutil.rmtree(f'{spaceName}-{timestamp}')
+            print(f'删除目录 {spaceName}-{timestamp}，该行为由 ONLY_SAVE_ZIP 控制')
     except Exception as e:
         print(f"删除{new_name}失败: {e}")
 
