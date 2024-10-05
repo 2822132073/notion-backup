@@ -212,9 +212,16 @@ def remove_files_id():
         for root, dirs, files in os.walk(SAVE_DIR):
             for dir in dirs:
                 path = os.path.join(root, dir)
-                dir_id = re.compile(r'[a-fA-F\d]{8}-[a-fA-F\d]{4}-[a-fA-F\d]{4}-[a-fA-F\d]{4}-[a-fA-F\d]{12}').findall(dir)
-                if dir_id:
-                    new_dirname = dir.replace(dir_id[0], '')
+                dir_id = re.compile(
+                    r'[a-fA-F\d]{8}-[a-fA-F\d]{4}-[a-fA-F\d]{4}-[a-fA-F\d]{4}-[a-fA-F\d]{12}|[a-fA-F\d]{32}').findall(
+                    dir)
+                if len(dir_id) == 0:
+                    continue
+                if '-' in dir_id[0]:
+                    new_dirname = dir.replace('-' + dir_id[0], '')
+                else:
+                    new_dirname = dir.replace(' ' + dir_id[0], '')
+                if new_dirname != '':
                     new_path = os.path.join(root, new_dirname)
                     os.rename(path, new_path)
                     rename_dir_flag = True
