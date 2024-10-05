@@ -338,7 +338,7 @@ def main():
         shutil.rmtree(new_name)
         print(f"目录 {new_name} 已删除")
         if  ONLY_SAVE_ZIP:
-            shutil.rmtree(f'{spaceName}-{timestamp}')
+            shutil.rmtree(f'{SAVE_DIR}/{spaceName}-{timestamp}')
             print(f'删除目录 {SAVE_DIR}/{spaceName}-{timestamp}，该行为由 ONLY_SAVE_ZIP 控制')
     except Exception as e:
         print(f"删除{new_name}失败: {e}")
