@@ -32,23 +32,19 @@ jobs:
         run: pip3 install requests
       - name: run notion_backup.py
         env:
-          # NOTION_EMAIL: ${{ secrets.NOTION_EMAIL }}
-          # NOTION_PASSWORD: ${{ secrets.NOTION_PASSWORD }}
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
-          # NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }} # 在后台配置好token,或者用NOTION_EMAIL和NOTION_PASSWORD也可以
         run: |
           echo '开始执行'
-          python notion_backup.py
+          python notion_backup.py -c config.json
           echo '执行完成'
       - name: Commit and push artifact
         run: |
           tree ./
-          # git config user.name "fsl-github-action"
-          # git config user.email "2822132073@qq.com"
+          git config user.name "fsl-github-action"
+          git config user.email "2822132073@qq.com"
           # 将产物移动到需要的路径
-          # mv path/to/artifact ./artifact
-          # git add artifact
-          # git commit -m "Add artifact"
-          # git push
+          git add backup
+          git commit -m "action auto backup"
+          git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
