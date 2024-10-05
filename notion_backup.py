@@ -8,6 +8,7 @@ import argparse
 import subprocess
 import re
 from datetime import datetime
+
 # from notify import send
 
 # ={'spaces':[]} 则备份所有空间 'space_blocks':[] 则备份整个空间
@@ -133,8 +134,6 @@ def exportSpace(spaceId):
     }
 
 
-
-
 def exportSpaceBlock(spaceId, blockId):
     return {
         'task': {
@@ -158,7 +157,7 @@ def exportSpaceBlock(spaceId, blockId):
 
 def request_post(endpoint: str, params: object):
     global NOTION_FILE_TOKEN
-    #print('reqeust:{} {}'.format(endpoint, params))
+    # print('reqeust:{} {}'.format(endpoint, params))
     try:
         response = requests.post(
             f'{NOTION_API}/{endpoint}',
@@ -169,13 +168,14 @@ def request_post(endpoint: str, params: object):
             },
         )
         if response:
-            if not NOTION_FILE_TOKEN and response.cookies['file_token']:              
+            if not NOTION_FILE_TOKEN and response.cookies['file_token']:
                 NOTION_FILE_TOKEN = response.cookies['file_token']
             return response.json()
         else:
             print('request url:{} error response:{}'.format(endpoint, response))
     except Exception as e:
         print('request url:{} error {}'.format(endpoint, e))
+
 
 def getUserContent():
     return request_post('loadUserContent', {})['recordMap']
@@ -234,7 +234,7 @@ def remove_files_id():
             break
 
 
-def downloadAndUnzip(url, filename,uncompress):
+def downloadAndUnzip(url, filename, uncompress):
     print(f'文件名为：{filename}')
     os.makedirs(SAVE_DIR, exist_ok=True)
     savePath = SAVE_DIR + filename
@@ -291,7 +291,7 @@ def main():
         except Exception as e:
             print(f"重命名{new_name}失败: {e}")
             raise e
-            
+
     # 初始化Token
     initNotionToken()
 
@@ -315,7 +315,7 @@ def main():
         if len(backup_space_names) == 0:
             taskId = request_post('enqueueTask', exportSpace(spaceId)).get('taskId')
             url = exportUrl(taskId)
-            downloadAndUnzip(url, f'{spaceName}-{timestamp}.zip',True)
+            downloadAndUnzip(url, f'{spaceName}-{timestamp}.zip', True)
         elif spaceName in backup_space_names:
             # 指定了space下的block
             if 'space_blocks' in backup_space_config[spaceName] and backup_space_config[spaceName]['space_blocks']:
@@ -324,23 +324,21 @@ def main():
                     block_name = space_block['block_name']
                     taskId = request_post('enqueueTask', exportSpaceBlock(spaceId, block_id)).get('taskId')
                     url = exportUrl(taskId)
-                    downloadAndUnzip(url, f'{spaceName}-{block_name}-{timestamp}.zip',True)
+                    downloadAndUnzip(url, f'{spaceName}-{block_name}-{timestamp}.zip', True)
             else:
                 # 没指定space block则备份整个空间
                 taskId = request_post('enqueueTask', exportSpace(spaceId)).get('taskId')
                 url = exportUrl(taskId)
-                downloadAndUnzip(url, f'{spaceName}-{timestamp}.zip',True)
-                    # 删除重命名后的目录
+                downloadAndUnzip(url, f'{spaceName}-{timestamp}.zip', True)
+                # 删除重命名后的目录
+        else:
+            print('space:{}跳过 不在备份列表'.format(spaceName))
         try:
-            if  ONLY_SAVE_ZIP:
+            if ONLY_SAVE_ZIP:
                 shutil.rmtree(f'{SAVE_DIR}/{spaceName}-{timestamp}')
                 print(f'删除目录 {SAVE_DIR}/{spaceName}-{timestamp}，该行为由 ONLY_SAVE_ZIP 控制')
         except Exception as e:
             print(f"删除{new_name}失败: {e}")
-            else:
-                print('space:{}跳过 不在备份列表'.format(spaceName))
-        
-
 
 
 
@@ -352,17 +350,17 @@ def run_retry():
             break
         except Exception as e:
             count += 1
-            #writeLog('notion备份执行出错:' + str(e))
+            # writeLog('notion备份执行出错:' + str(e))
             print('执行出错:', str(e))
         if count > 3:
-            #writeLog('notion备份尝试{}次出错'.format(count))
+            # writeLog('notion备份尝试{}次出错'.format(count))
             print('尝试{}次出错'.format(count))
             break
         time.sleep(15)
 
 
 if __name__ == '__main__':
-    #writeLog('开始执行notion备份')
+    # writeLog('开始执行notion备份')
     parser = argparse.ArgumentParser(description='ArgUtils')
     parser.add_argument('-c',
                         type=str,
@@ -380,10 +378,10 @@ if __name__ == '__main__':
                 print('使用参数 DEFAULT_BACKUP_CONFIG:{}'.format(DEFAULT_BACKUP_CONFIG))
         except Exception as e:
             print('参数格式错误,请检查是否为合法的json字符串')
-            print('{"spaces": [{"space_name": "xxx", "space_blocks": [{"block_id": "12345678-1234-1234-1234-123456789123", "block_name": "xx"}]}]}')
+            print(
+                '{"spaces": [{"space_name": "xxx", "space_blocks": [{"block_id": "12345678-1234-1234-1234-123456789123", "block_name": "xx"}]}]}')
             raise Exception('参数格式错误,请检查是否为合法的json字符串:' + str(e))
     else:
         print('使用默认配置 DEFAULT_BACKUP_CONFIG:{}'.format(DEFAULT_BACKUP_CONFIG))
 
     run_retry()
-
