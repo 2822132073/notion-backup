@@ -241,7 +241,7 @@ def remove_files_id():
             break
 
 
-def downloadAndUnzip(url, filename):
+def downloadAndUnzip(url, filename,uncompress):
     os.makedirs(SAVE_DIR, exist_ok=True)
     savePath = SAVE_DIR + filename
     with requests.get(url, stream=True, headers={'cookie': f'file_token={NOTION_FILE_TOKEN}'}) as r:
@@ -252,7 +252,8 @@ def downloadAndUnzip(url, filename):
         print('保存文件:' + savePath)
     else:
         print('保存文件:' + savePath + '失败')
-
+    if not uncompress:
+        return
     save_dir = savePath.replace(".zip", "")
     for file in os.listdir(save_dir):
         file_path = os.path.join(save_dir, file)
@@ -320,7 +321,7 @@ def main():
         if len(backup_space_names) == 0:
             taskId = request_post('enqueueTask', exportSpace(spaceId)).get('taskId')
             url = exportUrl(taskId)
-            downloadAndUnzip(url, f'{spaceName}.zip')
+            downloadAndUnzip(url, f'{spaceName}-{timestamp}.zip',false)
         elif spaceName in backup_space_names:
             # 指定了space下的block
             if 'space_blocks' in backup_space_config[spaceName] and backup_space_config[spaceName]['space_blocks']:
@@ -329,12 +330,12 @@ def main():
                     block_name = space_block['block_name']
                     taskId = request_post('enqueueTask', exportSpaceBlock(spaceId, block_id)).get('taskId')
                     url = exportUrl(taskId)
-                    downloadAndUnzip(url, f'{spaceName}-{block_name}.zip')
+                    downloadAndUnzip(url, f'{spaceName}-{block_name}.zip',false)
             else:
                 # 没指定space block则备份整个空间
                 taskId = request_post('enqueueTask', exportSpace(spaceId)).get('taskId')
                 url = exportUrl(taskId)
-                downloadAndUnzip(url, f'{spaceName}.zip')
+                downloadAndUnzip(url, f'{spaceName}.zip',false)
         else:
             print('space:{}跳过 不在备份列表'.format(spaceName))
             
