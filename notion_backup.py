@@ -19,6 +19,8 @@ DEFAULT_BACKUP_CONFIG = {
 # 是否去除所有文件和文件夹的id
 REMOVE_FILES_ID = True
 
+# 不重命名之前SAVE_DIR下文件
+NOT_RENAME_PRE = True
 # 是否只保留zip文件
 ONLY_SAVE_ZIP = True
 # 默认配置无需更改
@@ -281,7 +283,7 @@ def main():
     # 获取当前时间戳
     timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
     new_name = f"backup_{timestamp}"
-    if os.path.exists(SAVE_DIR):
+    if os.path.exists(SAVE_DIR) and not NOT_RENAME_PRE:
         # 重命名目录
         try:
             shutil.move(SAVE_DIR, new_name)
@@ -337,15 +339,10 @@ def main():
         print(f"目录 {new_name} 已删除")
         if  ONLY_SAVE_ZIP:
             shutil.rmtree(f'{spaceName}-{timestamp}')
-            print(f'删除目录 {spaceName}-{timestamp}，该行为由 ONLY_SAVE_ZIP 控制')
+            print(f'删除目录 {SAVE_DIR}/{spaceName}-{timestamp}，该行为由 ONLY_SAVE_ZIP 控制')
     except Exception as e:
         print(f"删除{new_name}失败: {e}")
 
-    # git
-    # print('开始提交代码')
-    # pull()
-    # push()
-    # writeLog('notion备份完成')
 
 
 def run_retry():
