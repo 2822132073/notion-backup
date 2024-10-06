@@ -1,5 +1,13 @@
 # notion-backup
 
+## 使用教程
+| 会自动同步config.json中指定的workspace，以zip压缩包的形式备份到backup/，每天下午15.30左右备份一次
+1. fork该项目
+2. 修改config.json
+3. 在settings中填写NOTION_TOKEN环境变量
+
+
+
 ## notion 自动备份脚本
 ## Automatic Notion workspace backup to git and local
 
