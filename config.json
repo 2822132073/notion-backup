@@ -1,4 +1,5 @@
 {"spaces": [
-        {"space_name": "study_space", "space_blocks": []}
+        {"space_name": "study_space", "space_blocks": []},
+        {"space_name": "work", "space_blocks": []}
     ]
 }
